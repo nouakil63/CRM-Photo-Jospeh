@@ -1,4 +1,4 @@
-# CRM Photo — Académie de Lavo
+# CRM Photo — Académie Delaveau Photo
 
 CRM pour le photographe Joseph : suivi des académiciens et de leurs paiements
 (qui a payé, combien, quand), avec enregistrement automatique des paiements
