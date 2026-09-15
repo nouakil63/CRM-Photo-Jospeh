@@ -36,7 +36,6 @@ export async function createStudent(formData: FormData) {
     last_name: String(formData.get("last_name") ?? "").trim(),
     email: email || null,
     phone: String(formData.get("phone") ?? "").trim() || null,
-    class_name: String(formData.get("class_name") ?? "").trim() || null,
     expected_amount: eurosToCents(formData.get("expected_amount")),
     notes: String(formData.get("notes") ?? "").trim() || null,
   });
@@ -58,7 +57,6 @@ export async function updateStudent(formData: FormData) {
       last_name: String(formData.get("last_name") ?? "").trim(),
       email: email || null,
       phone: String(formData.get("phone") ?? "").trim() || null,
-      class_name: String(formData.get("class_name") ?? "").trim() || null,
       expected_amount: eurosToCents(formData.get("expected_amount")),
       notes: String(formData.get("notes") ?? "").trim() || null,
     })

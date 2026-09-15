@@ -106,30 +106,18 @@ export default async function StudentPage({
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium">
-                  Classe
-                </label>
-                <input
-                  name="class_name"
-                  defaultValue={student.class_name ?? ""}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium">
-                  Montant mensuel (€)
-                </label>
-                <input
-                  name="expected_amount"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  defaultValue={(student.expected_amount / 100).toFixed(2)}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                />
-              </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                Montant mensuel (€)
+              </label>
+              <input
+                name="expected_amount"
+                type="number"
+                step="0.01"
+                min="0"
+                defaultValue={(student.expected_amount / 100).toFixed(2)}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              />
             </div>
             <div>
               <label className="mb-1 block text-sm font-medium">Notes</label>
