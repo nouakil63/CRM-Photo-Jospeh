@@ -70,14 +70,14 @@ export default async function NewStudentPage({
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium">
-              Montant attendu (€)
+              Montant mensuel (€)
             </label>
             <input
               name="expected_amount"
               type="number"
               step="0.01"
               min="0"
-              defaultValue="0"
+              defaultValue="15"
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
             />
           </div>

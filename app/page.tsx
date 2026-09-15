@@ -21,20 +21,26 @@ export default async function Dashboard() {
       .order("paid_at", { ascending: false }),
   ]);
 
+  // Logique mensuelle : expected_amount = montant dû chaque mois (ex. 15 €).
+  const monthKey = new Date().toISOString().slice(0, 7);
+
   const rows = ((students ?? []) as StudentWithPayments[]).map((s) => {
     const paid = s.payments.filter((p) => p.status === "paid");
     const totalPaid = paid.reduce((sum, p) => sum + p.amount, 0);
+    const paidThisMonth = paid
+      .filter((p) => p.paid_at.slice(0, 7) === monthKey)
+      .reduce((sum, p) => sum + p.amount, 0);
     const lastPayment = paid
       .map((p) => p.paid_at)
       .sort()
       .at(-1);
-    return { ...s, totalPaid, lastPayment };
+    return { ...s, totalPaid, paidThisMonth, lastPayment };
   });
 
-  const totalCollected = rows.reduce((sum, r) => sum + r.totalPaid, 0);
-  const totalExpected = rows.reduce((sum, r) => sum + r.expected_amount, 0);
+  const collectedThisMonth = rows.reduce((sum, r) => sum + r.paidThisMonth, 0);
+  const expectedPerMonth = rows.reduce((sum, r) => sum + r.expected_amount, 0);
   const upToDate = rows.filter(
-    (r) => r.expected_amount > 0 && r.totalPaid >= r.expected_amount
+    (r) => r.expected_amount > 0 && r.paidThisMonth >= r.expected_amount
   ).length;
 
   return (
@@ -43,19 +49,19 @@ export default async function Dashboard() {
       <main className="mx-auto max-w-5xl px-4 py-8">
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-gray-200 bg-white p-4">
-            <p className="text-sm text-gray-500">Total encaissé</p>
+            <p className="text-sm text-gray-500">Encaissé ce mois-ci</p>
             <p className="text-2xl font-semibold">
-              {formatEuros(totalCollected)}
+              {formatEuros(collectedThisMonth)}
             </p>
           </div>
           <div className="rounded-xl border border-gray-200 bg-white p-4">
-            <p className="text-sm text-gray-500">Total attendu</p>
+            <p className="text-sm text-gray-500">Attendu par mois</p>
             <p className="text-2xl font-semibold">
-              {formatEuros(totalExpected)}
+              {formatEuros(expectedPerMonth)}
             </p>
           </div>
           <div className="rounded-xl border border-gray-200 bg-white p-4">
-            <p className="text-sm text-gray-500">Académiciens à jour</p>
+            <p className="text-sm text-gray-500">À jour ce mois-ci</p>
             <p className="text-2xl font-semibold">
               {upToDate} / {rows.length}
             </p>
@@ -130,8 +136,8 @@ export default async function Dashboard() {
               <tr className="border-b border-gray-200 text-left text-gray-500">
                 <th className="px-4 py-3 font-medium">Nom</th>
                 <th className="px-4 py-3 font-medium">Classe</th>
-                <th className="px-4 py-3 font-medium">Payé</th>
-                <th className="px-4 py-3 font-medium">Attendu</th>
+                <th className="px-4 py-3 font-medium">Ce mois-ci</th>
+                <th className="px-4 py-3 font-medium">Total payé</th>
                 <th className="px-4 py-3 font-medium">Dernier paiement</th>
                 <th className="px-4 py-3 font-medium">Statut</th>
               </tr>
@@ -159,16 +165,16 @@ export default async function Dashboard() {
                     <div className="text-xs text-gray-400">{s.email}</div>
                   </td>
                   <td className="px-4 py-3">{s.class_name ?? "—"}</td>
-                  <td className="px-4 py-3">{formatEuros(s.totalPaid)}</td>
                   <td className="px-4 py-3">
-                    {formatEuros(s.expected_amount)}
+                    {formatEuros(s.paidThisMonth)}
                   </td>
+                  <td className="px-4 py-3">{formatEuros(s.totalPaid)}</td>
                   <td className="px-4 py-3">
                     {s.lastPayment ? formatDate(s.lastPayment) : "—"}
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge
-                      totalPaid={s.totalPaid}
+                      totalPaid={s.paidThisMonth}
                       expected={s.expected_amount}
                     />
                   </td>

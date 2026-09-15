@@ -30,6 +30,10 @@ export default async function StudentPage({
 
   const paid = student.payments.filter((p) => p.status === "paid");
   const totalPaid = paid.reduce((sum, p) => sum + p.amount, 0);
+  const monthKey = new Date().toISOString().slice(0, 7);
+  const paidThisMonth = paid
+    .filter((p) => p.paid_at.slice(0, 7) === monthKey)
+    .reduce((sum, p) => sum + p.amount, 0);
   const payments = [...student.payments].sort((a, b) =>
     b.paid_at.localeCompare(a.paid_at)
   );
@@ -44,12 +48,13 @@ export default async function StudentPage({
               {student.last_name} {student.first_name}
             </h1>
             <p className="text-sm text-gray-500">
-              {formatEuros(totalPaid)} payé sur{" "}
-              {formatEuros(student.expected_amount)} attendu
+              {formatEuros(paidThisMonth)} payé ce mois-ci sur{" "}
+              {formatEuros(student.expected_amount)} — {formatEuros(totalPaid)}{" "}
+              au total
             </p>
           </div>
           <StatusBadge
-            totalPaid={totalPaid}
+            totalPaid={paidThisMonth}
             expected={student.expected_amount}
           />
         </div>
@@ -114,7 +119,7 @@ export default async function StudentPage({
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium">
-                  Montant attendu (€)
+                  Montant mensuel (€)
                 </label>
                 <input
                   name="expected_amount"
