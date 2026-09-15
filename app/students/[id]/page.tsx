@@ -7,6 +7,7 @@ import {
   deleteStudent,
   updateStudent,
 } from "@/app/actions";
+import { cotisationDue } from "@/lib/config";
 import { formatDate, formatEuros, METHOD_LABELS } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { StudentWithPayments } from "@/lib/types";
@@ -48,14 +49,15 @@ export default async function StudentPage({
               {student.last_name} {student.first_name}
             </h1>
             <p className="text-sm text-gray-500">
-              {formatEuros(paidThisMonth)} payé ce mois-ci sur{" "}
-              {formatEuros(student.expected_amount)} — {formatEuros(totalPaid)}{" "}
-              au total
+              {cotisationDue()
+                ? `${formatEuros(paidThisMonth)} payé ce mois-ci sur ${formatEuros(student.expected_amount)}`
+                : "Mois sans cotisation"}{" "}
+              — {formatEuros(totalPaid)} au total
             </p>
           </div>
           <StatusBadge
             totalPaid={paidThisMonth}
-            expected={student.expected_amount}
+            expected={cotisationDue() ? student.expected_amount : 0}
           />
         </div>
 

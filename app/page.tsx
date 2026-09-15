@@ -2,6 +2,7 @@ import Link from "next/link";
 import Header from "@/app/components/Header";
 import StatusBadge from "@/app/components/StatusBadge";
 import { assignPayment } from "@/app/actions";
+import { cotisationDue } from "@/lib/config";
 import { formatDate, formatEuros } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { Payment, StudentWithPayments } from "@/lib/types";
@@ -23,6 +24,7 @@ export default async function Dashboard() {
 
   // Logique mensuelle : expected_amount = montant dû chaque mois (ex. 15 €).
   const monthKey = new Date().toISOString().slice(0, 7);
+  const due = cotisationDue();
 
   const rows = ((students ?? []) as StudentWithPayments[]).map((s) => {
     const paid = s.payments.filter((p) => p.status === "paid");
@@ -38,7 +40,9 @@ export default async function Dashboard() {
   });
 
   const collectedThisMonth = rows.reduce((sum, r) => sum + r.paidThisMonth, 0);
-  const expectedPerMonth = rows.reduce((sum, r) => sum + r.expected_amount, 0);
+  const expectedThisMonth = due
+    ? rows.reduce((sum, r) => sum + r.expected_amount, 0)
+    : 0;
   const upToDate = rows.filter(
     (r) => r.expected_amount > 0 && r.paidThisMonth >= r.expected_amount
   ).length;
@@ -47,6 +51,11 @@ export default async function Dashboard() {
     <>
       <Header />
       <main className="mx-auto max-w-5xl px-4 py-8">
+        {!due && (
+          <div className="mb-8 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+            Mois sans cotisation — aucun paiement attendu ce mois-ci.
+          </div>
+        )}
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-gray-200 bg-white p-4">
             <p className="text-sm text-gray-500">Encaissé ce mois-ci</p>
@@ -55,15 +64,15 @@ export default async function Dashboard() {
             </p>
           </div>
           <div className="rounded-xl border border-gray-200 bg-white p-4">
-            <p className="text-sm text-gray-500">Attendu par mois</p>
+            <p className="text-sm text-gray-500">Attendu ce mois-ci</p>
             <p className="text-2xl font-semibold">
-              {formatEuros(expectedPerMonth)}
+              {formatEuros(expectedThisMonth)}
             </p>
           </div>
           <div className="rounded-xl border border-gray-200 bg-white p-4">
             <p className="text-sm text-gray-500">À jour ce mois-ci</p>
             <p className="text-2xl font-semibold">
-              {upToDate} / {rows.length}
+              {due ? `${upToDate} / ${rows.length}` : "—"}
             </p>
           </div>
         </div>
@@ -173,7 +182,7 @@ export default async function Dashboard() {
                   <td className="px-4 py-3">
                     <StatusBadge
                       totalPaid={s.paidThisMonth}
-                      expected={s.expected_amount}
+                      expected={due ? s.expected_amount : 0}
                     />
                   </td>
                 </tr>
