@@ -4,8 +4,7 @@ export type Student = {
   last_name: string;
   email: string | null;
   phone: string | null;
-  class_name: string | null;
-  expected_amount: number; // en centimes
+  expected_amount: number; // montant mensuel, en centimes
   notes: string | null;
   created_at: string;
 };

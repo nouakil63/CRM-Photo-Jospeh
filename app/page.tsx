@@ -135,7 +135,6 @@ export default async function Dashboard() {
             <thead>
               <tr className="border-b border-gray-200 text-left text-gray-500">
                 <th className="px-4 py-3 font-medium">Nom</th>
-                <th className="px-4 py-3 font-medium">Classe</th>
                 <th className="px-4 py-3 font-medium">Ce mois-ci</th>
                 <th className="px-4 py-3 font-medium">Total payé</th>
                 <th className="px-4 py-3 font-medium">Dernier paiement</th>
@@ -145,7 +144,7 @@ export default async function Dashboard() {
             <tbody>
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
                     Aucun académicien pour l&apos;instant. Ajoute le premier !
                   </td>
                 </tr>
@@ -164,7 +163,6 @@ export default async function Dashboard() {
                     </Link>
                     <div className="text-xs text-gray-400">{s.email}</div>
                   </td>
-                  <td className="px-4 py-3">{s.class_name ?? "—"}</td>
                   <td className="px-4 py-3">
                     {formatEuros(s.paidThisMonth)}
                   </td>

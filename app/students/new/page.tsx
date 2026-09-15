@@ -52,21 +52,12 @@ export default async function NewStudentPage({
               automatiquement les paiements Stripe.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1 block text-sm font-medium">Téléphone</label>
-              <input
-                name="phone"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium">Classe</label>
-              <input
-                name="class_name"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              />
-            </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium">Téléphone</label>
+            <input
+              name="phone"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            />
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium">
