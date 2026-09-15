@@ -1,4 +1,4 @@
--- Schéma initial du CRM Photo (Académie de Lavo).
+-- Schéma initial du CRM Photo (Académie Delaveau Photo).
 -- À exécuter dans Supabase : SQL Editor > New query > coller > Run.
 
 create extension if not exists "pgcrypto";

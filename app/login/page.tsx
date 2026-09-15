@@ -10,7 +10,7 @@ export default async function LoginPage({
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-        <h1 className="mb-1 text-xl font-semibold">Académie de Lavo</h1>
+        <h1 className="mb-1 text-xl font-semibold">Académie Delaveau Photo</h1>
         <p className="mb-6 text-sm text-gray-500">
           CRM Photo — espace de Joseph
         </p>
