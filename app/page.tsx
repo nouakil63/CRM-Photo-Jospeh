@@ -90,21 +90,26 @@ export default async function Dashboard() {
               {((unassigned ?? []) as Payment[]).map((p) => (
                 <li
                   key={p.id}
-                  className="flex flex-wrap items-center gap-3 rounded-md bg-white p-3 text-sm"
+                  className="flex flex-col gap-3 rounded-md bg-white p-3 text-sm sm:flex-row sm:flex-wrap sm:items-center"
                 >
-                  <span className="font-medium">{formatEuros(p.amount)}</span>
-                  <span className="text-gray-500">
-                    {formatDate(p.paid_at)}
-                  </span>
-                  <span className="text-gray-500">
-                    {p.payer_email ?? "email inconnu"}
-                  </span>
-                  <form action={assignPayment} className="ml-auto flex gap-2">
+                  <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+                    <span className="font-medium">{formatEuros(p.amount)}</span>
+                    <span className="text-gray-500">
+                      {formatDate(p.paid_at)}
+                    </span>
+                    <span className="min-w-0 break-all text-gray-500">
+                      {p.payer_email ?? "email inconnu"}
+                    </span>
+                  </div>
+                  <form
+                    action={assignPayment}
+                    className="flex w-full min-w-0 gap-2 sm:ml-auto sm:w-auto"
+                  >
                     <input type="hidden" name="payment_id" value={p.id} />
                     <select
                       name="student_id"
                       required
-                      className="rounded-md border border-gray-300 px-2 py-1 text-sm"
+                      className="w-full min-w-0 flex-1 rounded-md border border-gray-300 px-2 py-2 text-base sm:w-56 sm:flex-none sm:py-1 sm:text-sm"
                       defaultValue=""
                     >
                       <option value="" disabled>
@@ -118,7 +123,7 @@ export default async function Dashboard() {
                     </select>
                     <button
                       type="submit"
-                      className="rounded-md bg-gray-900 px-3 py-1 text-white hover:bg-gray-700"
+                      className="shrink-0 rounded-md bg-gray-900 px-3 py-2 text-white hover:bg-gray-700 sm:py-1"
                     >
                       Associer
                     </button>
